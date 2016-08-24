@@ -42,6 +42,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -54,9 +55,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DatabaseLayer\DatabaseLayer.csproj">
+    <ProjectReference Include="..\DatabaseLayer\DatabaseAccess.csproj">
       <Project>{7781c057-e33c-4574-9c91-d13a71faae86}</Project>
-      <Name>DatabaseLayer</Name>
+      <Name>DatabaseAccess</Name>
     </ProjectReference>
     <ProjectReference Include="..\Model\Model.csproj">
       <Project>{aeb2b28a-1dcd-45e3-b51d-9d9ad183a2cd}</Project>

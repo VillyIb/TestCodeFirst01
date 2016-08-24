@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Validation;
@@ -169,9 +170,20 @@ namespace TestCodeFirst01
                 new DropCreateDatabaseIfModelChanges<DatabaseLayer.Model2>()
                 );
 
-            try
+
+                        try
             {
-                var context = new DatabaseLayer.Model2();
+                var connectionString =  ConfigurationManager.ConnectionStrings["Model2"];                
+                var connectionBuilder = new SqlConnectionStringBuilder(connectionString.ConnectionString);
+
+                // Optionally provide usename - password
+                {
+                    connectionBuilder.Password = "xxx";
+                    connectionBuilder.UserID = "yyy";
+                }
+
+
+                var context = new DatabaseLayer.Model2(connectionBuilder);
 
                 context.Person.Add(new Model.Person
                 {
