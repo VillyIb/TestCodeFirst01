@@ -16,7 +16,7 @@ namespace Model
         public string Surname { get; set; }
 
 
-        public Address Address { get; set; }
+        public AddressXX Address { get; set; }
 
 
 

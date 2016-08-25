@@ -10,13 +10,17 @@ namespace DatabaseLayer
 
         public virtual DbSet<Model.Person2> Person2 { get; set; }
 
+        public virtual DbSet<Model.Pickup.CustomerPickup> CustomerPickup{ get;set; }
+
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
 
-            Model.Address.Configure(modelBuilder);
-            Model.Person.Configure(modelBuilder);
-            Model.Person2.Configure(modelBuilder);
+            //Model.Address.Configure(modelBuilder);
+            //Model.Person.Configure(modelBuilder);
+            //Model.Person2.Configure(modelBuilder);
+
+            new DatabaseLayer.Pickup.PickupConfiguration(modelBuilder).Configure();
 
         }
 

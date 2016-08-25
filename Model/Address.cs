@@ -6,8 +6,10 @@ using System.Data.Entity.ModelConfiguration;
 namespace Model
 {
   
-    public class Address
+    public class AddressXX
     {
+        public int Id { get; set; }
+
         public string Attention { get; set; }
 
 
@@ -46,7 +48,7 @@ namespace Model
 
         public static void Configure(DbModelBuilder modelBuilder)
         {
-            var target = modelBuilder.ComplexType<Address>();
+            var target = modelBuilder.ComplexType<AddressXX>();
 
             var order = 1000; // Offsett in order not to mix with base tables.
 

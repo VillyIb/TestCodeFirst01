@@ -6,6 +6,7 @@ using System.Data.Entity.Validation;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
+using System.Data.Common;
 
 
 using Model;
@@ -167,15 +168,27 @@ namespace TestCodeFirst01
         static void Main(string[] args)
         {
             Database.SetInitializer(
-                new DropCreateDatabaseIfModelChanges<DatabaseLayer.Model2>()
+                //new DropCreateDatabaseIfModelChanges<DatabaseLayer.Model2>()
+                new DropCreateDatabaseAlways<DatabaseLayer.Model2>()
                 );
 
 
-                        try
+            try
             {
-                var connectionString =  ConfigurationManager.ConnectionStrings["Model2"];                
-                var connectionBuilder = new SqlConnectionStringBuilder(connectionString.ConnectionString);
+                SqlConnectionStringBuilder connectionBuilder;
 
+                if (bool.Parse("true"))
+                {
+                    var localDb = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Villy-T400\Documents\TestCodeFirst01.mdf;Integrated Security=True;Connect Timeout=30";
+                    connectionBuilder = new SqlConnectionStringBuilder(localDb);
+                }
+                else
+                {
+                    var connectionString = ConfigurationManager.ConnectionStrings["Model2"];
+                    connectionBuilder = new SqlConnectionStringBuilder(connectionString.ConnectionString);
+                }
+
+                if (bool.Parse("false"))
                 // Optionally provide usename - password
                 {
                     connectionBuilder.Password = "xxx";
@@ -194,9 +207,18 @@ namespace TestCodeFirst01
                     //{
                     ,
                     Address =
-                        new Model.Address
+                        new Model.AddressXX
                         {
-                            Attention = "Villy", City = "Hundested", CountryCode = "DK", Email = string.Empty, Name = "Villy", Phone = string.Empty, State = string.Empty, Street1 = "Nordstjernen 9", Street2 = "Torup", Zip = "3390"
+                            Attention = "Villy",
+                            City = "Hundested",
+                            CountryCode = "DK",
+                            Email = string.Empty,
+                            Name = "Villy",
+                            Phone = string.Empty,
+                            State = string.Empty,
+                            Street1 = "Nordstjernen 9",
+                            Street2 = "Torup",
+                            Zip = "3390"
                         }
                         //}
                 });
@@ -208,7 +230,7 @@ namespace TestCodeFirst01
                     Surname = "Jørgensen"
                     ,
                     Address =
-                        new Address
+                        new AddressXX
                         {
                             Attention = "",
                             City = "Hundested",

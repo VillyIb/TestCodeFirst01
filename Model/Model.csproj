@@ -46,6 +46,14 @@
     <Compile Include="Address.cs" />
     <Compile Include="Person2.cs" />
     <Compile Include="Person.cs" />
+    <Compile Include="Pickup\Address.cs" />
+    <Compile Include="Pickup\Class1.cs" />
+    <Compile Include="Pickup\CustomerPickup.cs" />
+    <Compile Include="Pickup\DispositionSetting.cs" />
+    <Compile Include="Pickup\ForwarderPickup.cs" />
+    <Compile Include="Pickup\ParcelDetail.cs" />
+    <Compile Include="Pickup\PickupStatus.cs" />
+    <Compile Include="Pickup\Shipment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

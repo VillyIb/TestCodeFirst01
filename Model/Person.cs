@@ -19,7 +19,7 @@ namespace Model
 
 
         [Required]
-        public Address Address { get; set; }
+        public AddressXX Address { get; set; }
 
 
         // Fluent Configuration 
