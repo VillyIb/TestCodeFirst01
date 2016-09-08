@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Model.Pickup
+﻿namespace Model.Pickup
 {
-    public enum PickupStatus
+    public enum PickupStatusForwarder
     {
         // NB max 20 character names due to database coloumn size.
 

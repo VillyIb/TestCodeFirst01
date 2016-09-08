@@ -1,6 +1,6 @@
 ﻿namespace Model.Pickup
 {
-    public class Address 
+    public class Address
     {
         public string Attention { get; set; }
 
@@ -30,5 +30,8 @@
 
 
         public string Zip { get; set; }
+
     }
+
+
 }

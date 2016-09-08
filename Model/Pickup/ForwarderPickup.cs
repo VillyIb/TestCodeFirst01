@@ -1,18 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
+using Model.Pickup;
 
 namespace Model.Pickup
 {
-    public class ForwarderPickup 
+    public class ForwarderPickup
     {
         public int Id { get; set; }
 
 
-
-        
         public Address Address { get; set; }
 
 
         public string AttentionLevel { get; set; }
+
+
+        public List<CustomerPickup> CustomerPickupList { get; set; }
 
 
         public DateTime DateTimeForwarding { get; set; }
@@ -36,19 +39,23 @@ namespace Model.Pickup
         public string PickupOperator { get; set; }
 
 
-        //public PickupType PickupType { get; set; }
+        public PickupStatusForwarder PickupStatus { get; set; } // Mapped to DB through PickupStatusString
+
+
+        public string PickupStatusString
+        {
+            get { return PickupStatus.ToString("G"); }
+            private set { PickupStatusForwarder t1; PickupStatus = Enum.TryParse(value, out t1) ? t1 : PickupStatusForwarder.Undefined; }
+        }
 
 
         public string SpecialTreatment { get; set; }
 
 
-        public string Status { get; set; }
+        public TimeSpan TimeClose { get; set; }
 
 
-        public TimeSpan? TimeClose { get; set; }
-
-
-        public TimeSpan? TimeReady { get; set; }
+        public TimeSpan TimeReady { get; set; }
 
 
         public DateTime TimestampUpdate { get; set; }
@@ -64,6 +71,9 @@ namespace Model.Pickup
 
 
         public Guid WebsiteId { get; set; }
+
+
+        public int WebsiteIdHash { get; set; }
 
 
     }

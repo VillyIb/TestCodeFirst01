@@ -6,10 +6,8 @@ using System.Data.Entity.Validation;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
-using System.Data.Common;
 
-
-using Model;
+using Model.Pickup;
 
 namespace TestCodeFirst01
 {
@@ -167,26 +165,30 @@ namespace TestCodeFirst01
 
         static void Main(string[] args)
         {
+
             Database.SetInitializer(
-                //new DropCreateDatabaseIfModelChanges<DatabaseLayer.Model2>()
-                new DropCreateDatabaseAlways<DatabaseLayer.Model2>()
+                //new DropCreateDatabaseIfModelChanges<DatabaseLayer.PickupV2.PickupContext>()
+                new DropCreateDatabaseAlways<DatabaseLayer.Context.ContextSharedPickup>()
                 );
+
+            SqlConnectionStringBuilder connectionBuilder;
+
+            if (bool.Parse("true"))
+            {
+                var localDb = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Villy-T400\Documents\TestCodeFirst01.mdf;Integrated Security=True;Connect Timeout=30";
+                connectionBuilder = new SqlConnectionStringBuilder(localDb);
+            }
+            else
+            {
+                var connectionString = ConfigurationManager.ConnectionStrings["Model2"];
+                connectionBuilder = new SqlConnectionStringBuilder(connectionString.ConnectionString);
+            }
+
+            var physicalFile = connectionBuilder.AttachDBFilename;
 
 
             try
             {
-                SqlConnectionStringBuilder connectionBuilder;
-
-                if (bool.Parse("true"))
-                {
-                    var localDb = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Villy-T400\Documents\TestCodeFirst01.mdf;Integrated Security=True;Connect Timeout=30";
-                    connectionBuilder = new SqlConnectionStringBuilder(localDb);
-                }
-                else
-                {
-                    var connectionString = ConfigurationManager.ConnectionStrings["Model2"];
-                    connectionBuilder = new SqlConnectionStringBuilder(connectionString.ConnectionString);
-                }
 
                 if (bool.Parse("false"))
                 // Optionally provide usename - password
@@ -196,61 +198,178 @@ namespace TestCodeFirst01
                 }
 
 
-                var context = new DatabaseLayer.Model2(connectionBuilder);
-
-                context.Person.Add(new Model.Person
+                using (var contextSharedPickup = new DatabaseLayer.Context.ContextSharedPickup(connectionBuilder))
+                using (var contextMainPickup = new DatabaseLayer.Context.ContextMainPickup(connectionBuilder))
                 {
-                    Name = "Villy"
-                    ,
-                    Surname = "Jørgensen"
-                    //, AddressList = new List<Model.Address>
+
+                    //context.Shipment.Add(new Model.Pickup.Shipment
                     //{
-                    ,
-                    Address =
-                        new Model.AddressXX
+                    //    Address = new Model.Pickup.Address
+                    //    {
+                    //        Attention = "att",
+                    //        City = "cit",
+                    //        CountryCode = "DK",
+                    //        Email = "ema",
+                    //        //HashCode
+                    //        Name = "nam",
+                    //        Phone = "phon",
+                    //        State = "na",
+                    //        Street1 = "Str1",
+                    //        Street2 = "str2",
+                    //        Zip = "zip"
+                    //    },
+                    //    BranchId = 0,
+                    //    CarrierId = 0,
+                    //    CarrierName = "cna",
+                    //    CustomerAccountId = 0,
+                    //    CustomerId = 0,
+                    //    CustomerPickupId = 0,
+                    //    DispositionSettingId = 0,
+                    //    DryiceWeight = 0m,
+                    //    Forwarder1PickupId = 0,
+                    //    Forwarder2PickupId = 0,
+                    //    Forwarder2WebsiteId = Guid.Empty,
+                    //    ForwarderName = "fwn",
+                    //    GroupIndex = 0,
+                    //    Id = 0,
+                    //    IsDeleted = false,
+                    //    IsLocked = false,
+                    //    SalesProductId = 0,
+                    //    ShipmentDate = DateTime.Now.Date,
+                    //    SourceShipmentId = 0,
+                    //    TansportProductId = 0,
+                    //    TimestampCreate = DateTime.Now,
+                    //    TimestampUpdate = DateTime.Now,
+                    //    UniqueSequence = 0,
+                    //    WaybillNumber = "wbn",
+                    //    WebsiteId = Guid.Empty,
+                    //    WebsiteIdHash = 0,
+                    //    Weight = 0m                        
+                    //});
+
+                    contextSharedPickup.CustomerPickup.Add(
+                        new Model.Pickup.CustomerPickup
                         {
-                            Attention = "Villy",
-                            City = "Hundested",
-                            CountryCode = "DK",
-                            Email = string.Empty,
-                            Name = "Villy",
-                            Phone = string.Empty,
-                            State = string.Empty,
-                            Street1 = "Nordstjernen 9",
-                            Street2 = "Torup",
-                            Zip = "3390"
+                            Address = new Address
+                            {
+                                Attention = "att",
+                                City = "cit",
+                                CountryCode = "DK",
+                                Email = "ema",
+                                //HashCode
+                                Name = "nam",
+                                Phone = "phon",
+                                State = "na",
+                                Street1 = "Str1",
+                                Street2 = "str2",
+                                Zip = "zip"
+                            },
+                            BranchId = 0,
+                            CustomerId = 0,
+                            Note = "not",
+                            SpecialTreatment = "spt",
+                            PickupStatusString = Model.Pickup.PickupStatusCustomer.CustWait.ToString("G"),
+                            PickupStatus = Model.Pickup.PickupStatusCustomer.CustWait,
+                            PickupDate = DateTime.Today,
+                            TimestampUpdate = DateTime.Now,
+                            WebsiteId = Guid.Empty,
+                            ShipmentList = new List<Shipment>
+                            {
+                                new Shipment
+                                {
+                                Address = new Address
+                                {
+                                    Attention = "att",
+                                    City = "cit",
+                                    CountryCode = "DK",
+                                    Email = "ema",
+                                    //HashCode
+                                    Name = "nam",
+                                    Phone = "phon",
+                                    State = "na",
+                                    Street1 = "Str1",
+                                    Street2 = "str2",
+                                    Zip = "zip"
+                                },
+                                GroupIndex = 0,
+                                CarrierId =   0,
+                                CustomerId = 0,
+                                SalesProductId = 0,
+                                BranchId = 0,
+                                CarrierName = "DHL",
+                                CustomerAccountId = 0,
+                                //CustomerPickupId = 0,
+                                DispositionSettingId = 0,
+                                DryiceWeight = 0m,
+                                Forwarder1PickupId = 0,
+                                ForwarderName = "gls",
+                                WaybillNumber = "12345",
+                                ShipmentDate = DateTime.Now.Date,
+                                TimestampCreate = DateTime.Now,
+                                TimestampUpdate = DateTime.Now,
+                                WebsiteId = Guid.Empty,
+                                }
+                            }
                         }
-                        //}
-                });
+                    );
 
+                    contextSharedPickup.SaveChanges();
 
-                context.Person2.Add(new Person2
-                {
-                    Name = "Villy",
-                    Surname = "Jørgensen"
-                    ,
-                    Address =
-                        new AddressXX
+                    contextMainPickup.DispositionSettings.Add(
+                        new DispositionSettings
                         {
-                            Attention = "",
-                            City = "Hundested",
-                            CountryCode = "DK",
-                            Email = "",
-                            Name = "Villy Ib Jørgensen",
-                            Phone = "",
-                            State = "",
-                            Street1 = "Nordstjernen 9",
-                            Street2 = "",
-                            Zip = "3390"
-                        }
-                });
+                            AccountId = "*",
+                            CarrierId = "*",
+                            CustomerId = "1277",
+                            SalesProductId = "*",
 
-                context.SaveChanges();
+                            PickupOperator = PickupOperator.DHL,
+                            EnabledForPickup = true,
+                            PickupStatus = PickupStatusCustomer.CustWait,
+                            PreallocatePickup = true,
+
+                            DispositionCode = "Forwarder1",
+                            TimeClose = new TimeSpan(16, 0, 0),
+                            TimeReady = new TimeSpan(12, 0, 0),
+
+                            Text = "Test",
+                        });
+                    contextMainPickup.SaveChanges();
+                }
             }
             catch (Exception ex)
             {
                 var t1 = Showlog(ex);
             }
+
+            using (var context = new DatabaseLayer.Context.ContextSharedPickup(connectionBuilder))
+            {
+
+                //var objContext = ((IObjectContextAdapter)context).ObjectContext;
+
+                //objContext.MetadataWorkspace.
+
+                var t1 = context.CustomerPickup.First();
+
+                var t2 = context.Entry(t1);
+
+                //t2.State = EntityState.Unchanged;
+                var t3 = t2.State;
+
+                //t1.CarrierId = 100;
+
+                t1.PickupStatus = Model.Pickup.PickupStatusCustomer.ForwWait;
+
+                t2 = context.Entry(t1); // must be reloaded in order to reflect state.
+
+                context.SaveChanges();
+            }
+
+            // Observations:
+            // A property in class but not saved in the database does not flip State (modified) when updated.
+            // It looks like the "State" is determined by comparing the "CurrentValues" value with the "OriginalValues"
+            // -> Property Mapping (E.G. Enum to String) doesn't matter if the saved property reads from the mapped property or reverse
+
         }
     }
 }
